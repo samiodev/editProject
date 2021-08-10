@@ -20,6 +20,10 @@ const projectReducer = (state = initialState, action) => {
       const updateState = state.map(project => project.id === action.payload.id ? action.payload : project)
       state = updateState
       return state
+    case 'DELETE_PROJECT':
+      const filterProject = state.filter(project => project.id !== action.payload && project)
+      state = filterProject
+      return state
     default: return state;
   }
 }

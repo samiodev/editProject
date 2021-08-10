@@ -1,18 +1,29 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
+import React, {useEffect, useState} from "react";
+import {Link, useHistory} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
 import AddForm from "./AddForm";
 import EditForm from "./EditForm";
+import {toast} from "react-toastify";
 
-export default function Home() {
+export default function Home(props) {
   const [modal, setModal] = useState(false)
-  const [updateModal, setUpdateModal] = useState(false)
+  const [editModal, setEditModal] = useState(false)
+
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   const openModalHandler = () => {
     setModal(!modal)
   }
-  const openUpdateModalHandler = () => {
-    setUpdateModal(!updateModal)
+
+  const editModalHandler = (id) => {
+    setEditModal(!editModal)
+    props.history.push(`/edit/${id}`)
+  }
+
+  const deleteProject = (id) => {
+    dispatch({type: 'DELETE_PROJECT', payload: id})
+    toast.success('Project deleted succesfully')
   }
 
   const projects = useSelector(state => state)
@@ -27,7 +38,7 @@ export default function Home() {
             Add Project
           </button>
           {modal ? <AddForm setModal={setModal} modal={modal} /> : null}
-          {updateModal ? <EditForm/> : null}
+          {editModal ? <EditForm /> : null}
           <div className="col-md-8 mx-auto">
             <table className="table table-hover text-center">
               <thead className="table table-hover bg-dark text-white">
@@ -45,11 +56,12 @@ export default function Home() {
                   <td>{project.name}</td>
                   <td>{project.descr}</td>
                   <td>
-                    <Link
-                      to={`/edit/${project.id}`}
-                      className="btn btn-small btn-primary">
-                      Edit
-                    </Link>
+                    <button className="btn" onClick={() => editModalHandler(project.id)}>Edit</button>
+                    <button
+                      className="btn btn-outline-danger"
+                      onClick={() => deleteProject(project.id)}>
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

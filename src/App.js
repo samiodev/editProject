@@ -14,13 +14,8 @@ export default function App() {
       <Navbar />
       <SideBar />
       <Switch>
-        <Route exact path="/" component={() => <Home />} />
-        <Route path="/add">
-          <AddForm />
-        </Route>
-        <Route path="/edit/:id">
-          <EditForm />
-        </Route>
+        <Route exact path="/" render={(props) => <Home {...props} />} />
+        <Route path="/edit/:id" render={(props) => <EditForm {...props} />} />
       </Switch>
     </div>
   )

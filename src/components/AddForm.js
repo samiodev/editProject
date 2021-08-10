@@ -23,6 +23,7 @@ export default function AddForm(props) {
     setDescr('')
 
     dispatch({type: 'ADD_PROJECT', payload: data})
+    toast.success('Project Added successfully')
     props.setModal(!props.modal)
   }
 
